@@ -212,6 +212,32 @@ statfiles = []
 statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
                                       final_veto_file, final_veto_name)
 
+<<<<<<< HEAD
+=======
+# Create the final log file
+log_file_html = wf.File(workflow.ifos, 'WORKFLOW-LOG', workflow.analysis_time,
+                                           extension='.html',
+                                           directory=rdir['workflow'])
+
+# Create a page to contain a dashboard link
+dashboard_file = wf.File(workflow.ifos, 'DASHBOARD', workflow.analysis_time,
+                                           extension='.html',
+                                           directory=rdir['workflow'])
+dashboard_str = """<center><p style="font-size:20px"><b><a href="PEGASUS_DASHBOARD_URL" target="_blank">Pegasus Dashboard Page</a></b></p></center>"""
+kwds = { 'title' : 'Pegasus Dashboard',
+         'caption' : "Link to Pegasus Dashboard",
+         'cmd' : "PYCBC_SUBMIT_DAX_ARGV", }
+save_fig_with_metadata(dashboard_str, dashboard_file.storage_path, **kwds)
+
+# Create pages for the submission script to write data
+wf.makedir(rdir['workflow/dax'])
+wf.makedir(rdir['workflow/input_map'])
+wf.makedir(rdir['workflow/output_map'])
+wf.makedir(rdir['workflow/planning'])
+
+wf.make_results_web_page(finalize_workflow, os.path.join(os.getcwd(),
+rdir.base))
+>>>>>>> 4ead9cb791860da2f1385cf7c1f67eaf2ecf765d
 
 container += workflow
 container += finalize_workflow
@@ -223,7 +249,11 @@ container._adag.addDependency(dep)
 container.save()
 
 # Protect the open box results folder
+<<<<<<< HEAD
 os.chmod(rdir['open_box_result'], 0700)
+=======
+# os.chmod(rdir['open_box_result'], 0700)
+>>>>>>> 4ead9cb791860da2f1385cf7c1f67eaf2ecf765d
 
 logging.info("Written dax.")
 
