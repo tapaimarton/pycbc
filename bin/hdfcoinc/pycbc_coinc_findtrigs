@@ -197,7 +197,7 @@ time_window_det0det1 = det0.light_travel_time_to_detector(det1) + args.coinc_thr
 time_window_det1det2 = det1.light_travel_time_to_detector(det2) + args.coinc_threshold
 time_window_det0det2 = det0.light_travel_time_to_detector(det2) + args.coinc_threshold
 
-if time_window >= args.timeslide_interval and args.timeslide_interval is not None:
+if time_window_det0det1 >= args.timeslide_interval and args.timeslide_interval is not None:
     raise parser.error("The maximum time delay between detectors should be smaller "
                        "than the timeslide interval.")
 
