@@ -53,6 +53,7 @@ args = parser.parse_args()
 args.statistic_files = sum(args.statistic_files, [])
 args.segment_name = sum(args.segment_name, [])
 args.veto_files = sum(args.veto_files, [])
+args.trigger_files = sum(args.trigger_files, [])
 
 if args.verbose:
     logging.basicConfig(filename='testfile.txt',format='%(asctime)s : %(message)s', level=logging.DEBUG)
