@@ -15,7 +15,7 @@ parser.add_argument("--segment-name", nargs='*', action='append', default=[],
 parser.add_argument("--strict-coinc-time", action='store_true',
                     help="Optional, only allow coincidences between triggers "
                     "that lie in coincident time after applying vetoes")
-parser.add_argument("--trigger-files", nargs=3,
+parser.add_argument("--trigger-files", nargs='*', action='append', default=[],
                     help="File containing the single-detector triggers")
 parser.add_argument("--template-bank", required=True,
                     help="Template bank file in HDF format")
@@ -46,6 +46,8 @@ parser.add_argument("--cluster-window", type=float,
 parser.add_argument("--output-file",
                     help="File to store the coincident triggers")
 args = parser.parse_args()
+
+# TODO Needs input: number of ifos, and check if the correct number of trigger files is given.
 
 # flatten the list of lists of filenames to a single list (may be empty)
 args.statistic_files = sum(args.statistic_files, [])
