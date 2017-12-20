@@ -58,7 +58,6 @@ args.trigger_files = sum(args.trigger_files, [])
 if args.verbose:
     logging.basicConfig(filename='testfile.txt',format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
-
 def parse_template_range(num_templates, rangestr):
     part = int(rangestr.split('/')[0])
     pieces = int(rangestr.split('/')[1])
