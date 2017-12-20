@@ -53,7 +53,7 @@ args.segment_name = sum(args.segment_name, [])
 args.veto_files = sum(args.veto_files, [])
 
 if args.verbose:
-    logging.basicConfig(filename=testfile.txt,format='%(asctime)s : %(message)s', level=logging.DEBUG)
+    logging.basicConfig(filename='testfile.txt',format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 
 def parse_template_range(num_templates, rangestr):
