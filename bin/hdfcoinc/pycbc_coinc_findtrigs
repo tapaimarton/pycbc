@@ -182,7 +182,6 @@ trigs2 = ReadByTemplate(args.trigger_files[2],
 coinc_segs = (trigs0.segs & trigs1.segs & trigs2.segs).coalesce()
 
 logging.info('The coincidence time for three detectors is is %3.1f ms' % (abs(coinc_segs) * 1000))
-logging.info('The test coincidence time for three detectors is is %3.1f ms' % (abs(test_coinc_segs) * 1000))
 
 
 if args.strict_coinc_time:
