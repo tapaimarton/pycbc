@@ -234,11 +234,11 @@ for tnum in range(tmin, tmax):
 
     logging.info('Coincident Trigs: %s' % (len(i1)))
 	
-	i1, i2, slide = coinc.time_coincidence(t1, t2, time_window_det1det2, args.timeslide_interval)
+    i1, i2, slide = coinc.time_coincidence(t1, t2, time_window_det1det2, args.timeslide_interval)
 
     logging.info('Coincident Trigs: %s' % (len(i2)))
 
-	i0, i2, slide = coinc.time_coincidence(t0, t2, time_window_det0det2, args.timeslide_interval)
+    i0, i2, slide = coinc.time_coincidence(t0, t2, time_window_det0det2, args.timeslide_interval)
 
     logging.info('Coincident Trigs: %s' % (len(i2)))
 
