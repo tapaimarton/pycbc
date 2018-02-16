@@ -478,6 +478,7 @@ setup (
                'bin/workflows/pycbc_make_coinc_search_workflow',
                'bin/workflows/pycbc_make_inference_workflow',
                'bin/workflows/pycbc_make_inference_inj_workflow',
+               'bin/workflows/pycbc_offline',
                'bin/workflows/pycbc_make_psd_estimation_workflow',
                'bin/workflows/pycbc_create_bank_verifier_workflow',
                'bin/pycbc_compress_bank',
