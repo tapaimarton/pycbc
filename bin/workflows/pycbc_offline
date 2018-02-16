@@ -212,7 +212,10 @@ statfiles = []
 statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
                                       final_veto_file, final_veto_name)
 
+<<<<<<< aff074a73214815f1621b9ebe1ba37724023b987
 
+=======
+>>>>>>> Added back corrections
 # Create the final log file
 log_file_html = wf.File(workflow.ifos, 'WORKFLOW-LOG', workflow.analysis_time,
                                            extension='.html',
@@ -247,9 +250,7 @@ container._adag.addDependency(dep)
 container.save()
 
 # Protect the open box results folder
-
 # os.chmod(rdir['open_box_result'], 0700)
-
 
 logging.info("Written dax.")
 
