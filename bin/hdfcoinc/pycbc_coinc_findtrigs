@@ -172,20 +172,20 @@ tmin, tmax = parse_template_range(num_templates, args.template_fraction_range)
 logging.info('Analyzing template %s - %s' % (tmin, tmax-1))
 
 for i in range(len(args.trigger_files)):
-	logging.info('Opening trigger file %s: %s' % (i,args.trigger_files[i]))
-	trigs[i]= ReadByTemplate(args.trigger_files[i],
+    logging.info('Opening trigger file %s: %s' % (i,args.trigger_files[i]))
+    trigs[i]= ReadByTemplate(args.trigger_files[i],
                        args.template_bank, args.segment_name, args.veto_files)
 
 if len(args.trigger_files) == 2:
-	coinc_segs = (trigs0.segs & trigs1.segs).coalesce()
+    coinc_segs = (trigs0.segs & trigs1.segs).coalesce()
 elif len(args.trigger_files) == 3:
-	coinc_segs = (trigs0.segs & trigs1.segs & trigs2.segs).coalesce()
+    coinc_segs = (trigs0.segs & trigs1.segs & trigs2.segs).coalesce()
 logging.info('The coincidence time for three detectors is is %3.1f ms' % (abs(coinc_segs) * 1000))
 
 if args.strict_coinc_time:
-	for i in range(len(args.trigger_files)):
-	    trigs[i].segs = coinc_segs
-	    trigs[i].valid = veto.segments_to_start_end(trigs[i].segs)
+    for i in range(len(args.trigger_files)):
+        trigs[i].segs = coinc_segs
+        trigs[i].valid = veto.segments_to_start_end(trigs[i].segs)
 
 # initialize a Stat class instance to calculate the coinc ranking statistic
 rank_method = stat.get_statistic(args.ranking_statistic)(args.statistic_files)
@@ -193,7 +193,7 @@ if args.use_maxalpha:
     rank_method.use_alphamax()
 det = [det0, det1, det2]
 for i in range(len(args.trigger_files)):
-	det[i] = detector.Detector(trigs[i].ifo)
+    det[i] = detector.Detector(trigs[i].ifo)
 
 time_window_det0det1 = det0.light_travel_time_to_detector(det1) + args.coinc_threshold
 time_window_det1det2 = det1.light_travel_time_to_detector(det2) + args.coinc_threshold
@@ -215,159 +215,93 @@ data = {'stat':[], 'decimation_factor':[], 'time1':[], 'time2':[],
         'trigger_id1':[], 'trigger_id2':[], 'timeslide_id':[], 'template_id':[]}
 
 for tnum in range(tmin, tmax):
-	tid = [tid0, tid1, tid2]
-	endtimes = [t0, t1, t2]
-	if len(args.trigger_files) == 2:
-		for i in range(len(args.trigger_files)):
-			tid[i] = trigs[i].set_template(tnum)
-		if (len(tid0) == 0) or (len(tid1) == 0):
-			continue
-		for i in range(len(args.trigger_files)):
-		endtimes[i] = trigs[i]['end_time']
+    tid = [tid0, tid1, tid2]
+    endtimes = [t0, t1, t2]
+    for i in range(len(args.trigger_files)):
+        tid[i] = trigs[i].set_template(tnum)
+    if len(args.trigger_files) == 2:
+        if (len(tid0) == 0) or (len(tid1) == 0):
+            continue
+    elif len(args.trigger_files) == 3:
+        if (len(tid0) == 0) or (len(tid1) == 0)or (len(tid2) == 0):
+            continue
+    for i in range(len(args.trigger_files)):
+    endtimes[i] = trigs[i]['end_time']
 
-		logging.info('Trigs for template %s, %s:%s %s:%s' % (tnum, trigs0.ifo, len(endtimes[0]), trigs1.ifo, len(endtimes[1])))
-		
-		i0, i1, slide = coinc.time_coincidence(t0, t1, time_window_det0det1, args.timeslide_interval)
+    logging.info('Trigs for template %s, %s:%s %s:%s' % (tnum, trigs0.ifo, len(endtimes[0]), trigs1.ifo, len(endtimes[1])))
 
-	    logging.info('Coincident Trigs: %s' % (len(i1)))
-		
-		logging.info('Calculating Single Detector Statistic')
-	    s0, s1 = rank_method.single(trigs0), rank_method.single(trigs1)
-		
-		logging.info('Calculating Multi-Detector Combined Statistic')
-    	c = rank_method.coinc(s0[i0], s1[i1], slide, args.timeslide_interval)
+    i0, i1, slide = coinc.time_coincidence(t0, t1, time_window_det0det1, args.timeslide_interval)
 
-    	#index values of the zerolag triggers
-    	fi = numpy.where(slide == 0)[0]
+    logging.info('Coincident Trigs: %s' % (len(i1)))
 
-    	#index values of the background triggers
-    	bi = numpy.where(slide != 0)[0]
-    	logging.info('%s foreground triggers' % len(fi))
-    	logging.info('%s background triggers' % len(bi))
+    logging.info('Calculating Single Detector Statistic')
+    if len(args.trigger_files) == 2:
+        s0, s1 = rank_method.single(trigs[0]), rank_method.single(trigs[1])
+    elif len(args.trigger_files) == 3:
+        s0, s1, s2= rank_method.single(trigs[0]), rank_method.single(trigs[1]), rank_method.single(trigs[2])
 
-    	# We split the background triggers into two types which we keep track of
-    	# in "bh" (triggers which are *not* decimated, stored in full) and
-    	# "bl" (triggers which may not be stored in full, but we keep track of
-    	# how many are removed)
-    	# "bl_int" keeps track of which triggers are *not* in the bh set. Depending
-    	# on the decimation factor option we may not store any of these or we may
-    	# keep a fraction of them corresponding to a subset of the timeslides
-    	if args.loudest_keep:
-    	    sep = len(bi) - args.loudest_keep
-    	    sep = 0 if sep < 0 else sep
-	
-    	    bsort = numpy.argpartition(c[bi], sep)
-    	    bl_int = bi[bsort[0:sep]]
-    	    bh = bi[bsort[sep:]]
-    	    del bsort
-    	    del bi
-    	elif args.loudest_keep_value:
-    	    bh = bi[c[bi] > args.loudest_keep_value]
-    	    bl_int = bi[c[bi] <= args.loudest_keep_value]
-    	else:
-    	    bh = bi
-	
-	    if args.decimation_factor:
-	        bl = bl_int[slide[bl_int] % args.decimation_factor == 0]
-	    else:
-	        bl = []
-	
-	    ti = numpy.concatenate([bl, bh, fi]).astype(numpy.uint32)
-	    logging.info('%s after decimation' % len(ti))
-	
-	    g0 = i0[ti]
-    	g1 = i1[ti]
-    	del i0
-    	del i1
+    logging.info('Calculating Multi-Detector Combined Statistic')
+    if len(args.trigger_files) == 2:
+        c = rank_method.coinc(s0[i0], s1[i1], slide, args.timeslide_interval)
+    elif len(args.trigger_files) == 3:
+        s = [s0[i0], s1[i1], s2[i2]]
+        c = rank_method.coinc_multiifo(s, slide, args.timeslide_interval)
 
-    	data['stat'] += [c[ti]]
-    	dec_fac = numpy.repeat([args.decimation_factor, 1, 1],
+
+    #index values of the zerolag triggers
+    fi = numpy.where(slide == 0)[0]
+
+    #index values of the background triggers
+    bi = numpy.where(slide != 0)[0]
+    logging.info('%s foreground triggers' % len(fi))
+    logging.info('%s background triggers' % len(bi))
+
+    # We split the background triggers into two types which we keep track of
+    # in "bh" (triggers which are *not* decimated, stored in full) and
+    # "bl" (triggers which may not be stored in full, but we keep track of
+    # how many are removed)
+    # "bl_int" keeps track of which triggers are *not* in the bh set. Depending
+    # on the decimation factor option we may not store any of these or we may
+    # keep a fraction of them corresponding to a subset of the timeslides
+    if args.loudest_keep:
+        sep = len(bi) - args.loudest_keep
+        sep = 0 if sep < 0 else sep
+
+        bsort = numpy.argpartition(c[bi], sep)
+        bl_int = bi[bsort[0:sep]]
+        bh = bi[bsort[sep:]]
+        del bsort
+        del bi
+    elif args.loudest_keep_value:
+        bh = bi[c[bi] > args.loudest_keep_value]
+        bl_int = bi[c[bi] <= args.loudest_keep_value]
+    else:
+        bh = bi
+
+    if args.decimation_factor:
+        bl = bl_int[slide[bl_int] % args.decimation_factor == 0]
+    else:
+        bl = []
+
+    ti = numpy.concatenate([bl, bh, fi]).astype(numpy.uint32)
+    logging.info('%s after decimation' % len(ti))
+
+    g0 = i0[ti]
+    g1 = i1[ti]
+    del i0
+    del i1
+
+    data['stat'] += [c[ti]]
+    dec_fac = numpy.repeat([args.decimation_factor, 1, 1],
                            [len(bl), len(bh), len(fi)]).astype(numpy.uint32)
-    	data['decimation_factor'] += [dec_fac]
-    	data['time1'] += [t0[g0]]
-    	data['time2'] += [t1[g1]]
-    	data['trigger_id1'] += [tid0[g0]]
-    	data['trigger_id2'] += [tid1[g1]]
-    	data['timeslide_id'] += [slide[ti]]
-    	data['template_id'] += [numpy.zeros(len(ti), dtype=numpy.uint32) + tnum]
-		
-	elif len(args.trigger_files) == 3:
-	    if (len(tid0) == 0) or (len(tid1) == 0) or (len(tid2) == 0):
-    	    continue
+    data['decimation_factor'] += [dec_fac]
+    data['time1'] += [t0[g0]]
+    data['time2'] += [t1[g1]]
+    data['trigger_id1'] += [tid0[g0]]
+    data['trigger_id2'] += [tid1[g1]]
+    data['timeslide_id'] += [slide[ti]]
+    data['template_id'] += [numpy.zeros(len(ti), dtype=numpy.uint32) + tnum]
 
-	    logging.info('Trigs for template %s, %s:%s %s:%s %s:%s' % (tnum, trigs0.ifo, len(t0), trigs1.ifo, len(t1), trigs2.ifo, len(t2)))
-
-    	i0, i1, slide = coinc.time_coincidence(t0, t1, time_window_det0det1, args.timeslide_interval)
-
-    	logging.info('Coincident Trigs: %s' % (len(i1)))
-	
-    	it1, i2, slide = coinc.time_coincidence(t1, t2, time_window_det1det2, args.timeslide_interval)
-
-    	logging.info('Coincident Trigs: %s' % (len(i2)))
-
-    	it0, it2, slide = coinc.time_coincidence(t0, t2, time_window_det0det2, args.timeslide_interval)
-
-    	logging.info('Coincident Trigs: %s' % (len(it2)))
-
-	    logging.info('Calculating Single Detector Statistic')
-	    s0, s1, s2 = rank_method.single(trigs[0]), rank_method.single(trigs[1], rank_method.single(trigs[2])
-
-	    logging.info('Calculating Multi-Detector Combined Statistic')
-	    c = rank_method.coinc(s0[i0], s1[i1], s2[i2], slide, args.timeslide_interval)
-
-	    #index values of the zerolag triggers
-    	fi = numpy.where(slide == 0)[0]
-	
-	    #index values of the background triggers
-	    bi = numpy.where(slide != 0)[0]
-	    logging.info('%s foreground triggers' % len(fi))
-	    logging.info('%s background triggers' % len(bi))
-	
-	    # We split the background triggers into two types which we keep track of
-	    # in "bh" (triggers which are *not* decimated, stored in full) and
-	    # "bl" (triggers which may not be stored in full, but we keep track of
-	    # how many are removed)
-	    # "bl_int" keeps track of which triggers are *not* in the bh set. Depending
-	    # on the decimation factor option we may not store any of these or we may
-	    # keep a fraction of them corresponding to a subset of the timeslides
-	    if args.loudest_keep:
-	        sep = len(bi) - args.loudest_keep
-	        sep = 0 if sep < 0 else sep
-	
-	        bsort = numpy.argpartition(c[bi], sep)
-	        bl_int = bi[bsort[0:sep]]
-	        bh = bi[bsort[sep:]]
-	        del bsort
-	        del bi
-	    elif args.loudest_keep_value:
-	        bh = bi[c[bi] > args.loudest_keep_value]
-	        bl_int = bi[c[bi] <= args.loudest_keep_value]
-	    else:
-	        bh = bi
-	
-	    if args.decimation_factor:
-	        bl = bl_int[slide[bl_int] % args.decimation_factor == 0]
-	    else:
-	        bl = []
-	
-	    ti = numpy.concatenate([bl, bh, fi]).astype(numpy.uint32)
-	    logging.info('%s after decimation' % len(ti))
-	
-	    g0 = i0[ti]
-	    g1 = i1[ti]
-	    del i0
-	    del i1
-	
-	    data['stat'] += [c[ti]]
-	    dec_fac = numpy.repeat([args.decimation_factor, 1, 1],
-	                           [len(bl), len(bh), len(fi)]).astype(numpy.uint32)
-	    data['decimation_factor'] += [dec_fac]
-	    data['time1'] += [t0[g0]]
-	    data['time2'] += [t1[g1]]
-	    data['trigger_id1'] += [tid0[g0]]
-	    data['trigger_id2'] += [tid1[g1]]
-	    data['timeslide_id'] += [slide[ti]]
-	    data['template_id'] += [numpy.zeros(len(ti), dtype=numpy.uint32) + tnum]
 
 if len(data['stat']) > 0:
     for key in data:
