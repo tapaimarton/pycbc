@@ -158,7 +158,6 @@ gate_files = wf.setup_gating_workflow(workflow, output_dir="gating")
 
 # add the gate files to the jobs that use them
 for job in ['calculate_psd', 'inspiral', 'single_template',
-
             'plot_singles_timefreq']:
   for gate_file in gate_files:
       ifo_gate = gate_file.cache_entry.url
@@ -213,10 +212,6 @@ statfiles = []
 statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
                                       final_veto_file, final_veto_name)
 
-<<<<<<< aff074a73214815f1621b9ebe1ba37724023b987
-
-=======
->>>>>>> Added back corrections
 # Create the final log file
 log_file_html = wf.File(workflow.ifos, 'WORKFLOW-LOG', workflow.analysis_time,
                                            extension='.html',
@@ -240,7 +235,6 @@ wf.makedir(rdir['workflow/planning'])
 
 wf.make_results_web_page(finalize_workflow, os.path.join(os.getcwd(),
 rdir.base))
-
 
 container += workflow
 container += finalize_workflow

@@ -56,6 +56,11 @@ args.trigger_files = sum(args.trigger_files, [])
 # Create list for the detector trigger files (3 for the current maximum number of detectors L1, H1 and V1), modify if number of detectors increases
 trigs = [trigs0, trigs1, trigs2]
 
+
+# for by hand testing, to see what the result of coincdence is, delete before finalizing
+if args.verbose:
+    logging.basicConfig(filename='testfile.txt',format='%(asctime)s : %(message)s', level=logging.DEBUG)
+
 # for by hand testing, to see what the result of coincdence is, delete before finalizing
 if args.verbose:
     logging.basicConfig(filename='testfile.txt',format='%(asctime)s : %(message)s', level=logging.DEBUG)
@@ -194,11 +199,9 @@ if args.use_maxalpha:
 det = [det0, det1, det2]
 for i in range(len(args.trigger_files)):
     det[i] = detector.Detector(trigs[i].ifo)
-
 time_window_det0det1 = det0.light_travel_time_to_detector(det1) + args.coinc_threshold
 time_window_det1det2 = det1.light_travel_time_to_detector(det2) + args.coinc_threshold
 time_window_det0det2 = det0.light_travel_time_to_detector(det2) + args.coinc_threshold
-
 if time_window_det0det1 >= args.timeslide_interval and args.timeslide_interval is not None:
     raise parser.error("The maximum time delay between detectors should be smaller "
                        "than the timeslide interval.")
@@ -446,6 +449,7 @@ else:
 
 f.attrs['num_slides'] = nslides
 logging.info('Done')
+
 f = h5py.File(outputfilename2, 'w')
 if len(data1['stat']) > 0:
     for key in data:
