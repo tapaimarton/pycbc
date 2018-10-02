@@ -234,6 +234,8 @@ for tnum in range(tmin, tmax):
 
     logging.info('Coincident Trigs: %s' % (len(ids[trigs['trigs0'].ifo])))
     logging.info('ids from time multi coinc {}'.format(ids))
+    for i in ids:
+        logging.info('ids from time multi coinc {} from ifo {}'.format(ids[i],i))
     logging.info('slides from time multi coinc {}'.format(slide))
 
     logging.info('Calculating Single Detector Statistic')
