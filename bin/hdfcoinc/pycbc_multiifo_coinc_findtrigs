@@ -232,7 +232,7 @@ for tnum in range(tmin, tmax):
 
     ids, slide = coinc.time_multi_coincidence(times, args.timeslide_interval, args.coinc_threshold,trigs['trigs0'].ifo,trigs['trigs1'].ifo)
 
-    logging.info('Coincident Trigs: %s' % (len(ids[0])))
+    logging.info('Coincident Trigs: %s' % (len(ids[trigs['trigs0'].ifo])))
 
     logging.info('Calculating Single Detector Statistic')
     sds={}
