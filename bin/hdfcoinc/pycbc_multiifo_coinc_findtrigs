@@ -300,8 +300,8 @@ for tnum in range(tmin, tmax):
     # we need to create them, otherwise add new items into data.
     if 'time1' in data:
         for i in range(len(args.trigger_files)):
-            data['time{}'.format(i+1)] = data['time{}'.format(i+1)] + times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-            data['trigger_id{}'.format(i+1)] = data['trigger_id{}'.format(i+1)] + tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            data.setdefault('time{}'.format(i+1), []).append(times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
+            data.setdefault('trigger_id{}'.format(i+1),[]).append(tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
     else:
         for i in range(len(args.trigger_files)):
             data['time{}'.format(i+1)] = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
