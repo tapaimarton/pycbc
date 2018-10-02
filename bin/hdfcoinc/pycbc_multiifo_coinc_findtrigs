@@ -233,17 +233,20 @@ for tnum in range(tmin, tmax):
     ids, slide = coinc.time_multi_coincidence(times, args.timeslide_interval, args.coinc_threshold,trigs['trigs0'].ifo,trigs['trigs1'].ifo)
 
     logging.info('Coincident Trigs: %s' % (len(ids[trigs['trigs0'].ifo])))
+    logging.info('results of coinc_multiifo {}'.format(ids))
 
     logging.info('Calculating Single Detector Statistic')
     sds={}
     for i in trigs:
         sds[trigs[i].ifo]=rank_method.single(trigs[i])
+    logging.info('results of coinc_multiifo {}'.format(sds))
 
     logging.info('Calculating Multi-Detector Combined Statistic')
 
     sdswithids={}
     for i in sds:
         sdswithids[i]=sds[i][ids[i]]
+    logging.info('results of coinc_multiifo {}'.format(sdswithids))
     c = rank_method.coinc_multiifo(sdswithids, slide, args.timeslide_interval)
     logging.info('results of coinc_multiifo {}'.format(c))
 
