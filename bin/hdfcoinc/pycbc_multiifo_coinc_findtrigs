@@ -237,7 +237,7 @@ for tnum in range(tmin, tmax):
     logging.info('Calculating Single Detector Statistic')
     sds={}
     for i in trigs:
-        sds[trigs[i].ifo]=rank_method.single(trigs[i])
+        sds[trigs[i].ifo]=rank_method.single(trigs[i][ids[trigs[i].ifo]])
 
     logging.info('Calculating Multi-Detector Combined Statistic')
 
