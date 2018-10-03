@@ -301,6 +301,8 @@ for tnum in range(tmin, tmax):
     # we need to create them, otherwise add new items into data.
     if 'time1' in data:
         for i in range(len(args.trigger_files)):
+            addtime=numpy.array()
+            addtriggerid=numpy.array()
             addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
             logging.info('results of addtime {}'.format(addtime))
             addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
@@ -311,6 +313,8 @@ for tnum in range(tmin, tmax):
             data['trigger_id{}'.format(i+1)] += addtriggerid
     else:
         for i in range(len(args.trigger_files)):
+            addtime=numpy.array()
+            addtriggerid=numpy.array()
             addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
             logging.info('results of addtime {}'.format(addtime))
             addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
