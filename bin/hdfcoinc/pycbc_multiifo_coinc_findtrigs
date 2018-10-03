@@ -244,9 +244,7 @@ for tnum in range(tmin, tmax):
     sdswithids={}
     for i in sds:
         sdswithids[i]=sds[i][ids[i]]
-    logging.info('sds with ids {}'.format(sdswithids))
     c = rank_method.coinc_multiifo(sdswithids, slide, args.timeslide_interval)
-    logging.info('results of coinc_multiifo {}'.format(c))
 
     #index values of the zerolag triggers
     fi = numpy.where(slide == 0)[0]
