@@ -305,8 +305,6 @@ for tnum in range(tmin, tmax):
             addtriggerid=numpy.array(tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
             logging.info('results of addtime {}'.format(addtime))
             logging.info('results of addtriggerid {}'.format(addtriggerid))
-            addtime = numpy.concatenate(addtime)
-            addtriggerid = numpy.concatenate(addtriggerid)
             data['time{}'.format(i+1)] += addtime
             data['trigger_id{}'.format(i+1)] += addtriggerid
     else:
@@ -315,11 +313,10 @@ for tnum in range(tmin, tmax):
             addtriggerid=numpy.array(tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
             logging.info('results of addtime {}'.format(addtime))
             logging.info('results of addtriggerid {}'.format(addtriggerid))
-            addtime = numpy.concatenate(addtime)
-            addtriggerid = numpy.concatenate(addtriggerid)
             data['time{}'.format(i+1)] = addtime
             data['trigger_id{}'.format(i+1)] = addtriggerid
     logging.info('print out data[time1] {}'.format(data['time1']))
+    logging.info('..............')
     data['stat'] += [c[ti]]
     dec_fac = numpy.repeat([args.decimation_factor, 1, 1],
                            [len(bl), len(bh), len(fi)]).astype(numpy.uint32)
