@@ -308,8 +308,12 @@ for tnum in range(tmin, tmax):
             data['trigger_id{}'.format(i+1)] += addtriggerid
     else:
         for i in range(len(args.trigger_files)):
-            data['time{}'.format(i+1)] = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-            data['trigger_id{}'.format(i+1)] = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+			addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+			addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+			addtime = numpy.concatenate(addtime)
+			addtriggerid = numpy.concatenate(addtriggerid)
+            data['time{}'.format(i+1)] = addtime
+            data['trigger_id{}'.format(i+1)] = addtriggerid
     logging.info('print out data[time1] {}'.format(data['time1']))
     data['stat'] += [c[ti]]
     dec_fac = numpy.repeat([args.decimation_factor, 1, 1],
