@@ -301,20 +301,20 @@ for tnum in range(tmin, tmax):
     # we need to create them, otherwise add new items into data.
     if 'time1' in data:
         for i in range(len(args.trigger_files)):
-            addtime=numpy.array(times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
-            addtriggerid=numpy.array(tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
+            addtime=times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            addtriggerid=tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
             logging.info('results of addtime {}'.format(addtime))
             logging.info('results of addtriggerid {}'.format(addtriggerid))
-            data['time{}'.format(i+1)] += addtime
-            data['trigger_id{}'.format(i+1)] += addtriggerid
+            data['time{}'.format(i+1)] += [addtime]
+            data['trigger_id{}'.format(i+1)] += [addtriggerid]
     else:
         for i in range(len(args.trigger_files)):
-            addtime=numpy.array(times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
-            addtriggerid=numpy.array(tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]])
+            addtime=times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            addtriggerid=tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
             logging.info('results of addtime {}'.format(addtime))
             logging.info('results of addtriggerid {}'.format(addtriggerid))
-            data['time{}'.format(i+1)] = addtime
-            data['trigger_id{}'.format(i+1)] = addtriggerid
+            data['time{}'.format(i+1)] = [addtime]
+            data['trigger_id{}'.format(i+1)] = [addtriggerid]
     logging.info('print out data[time1] {}'.format(data['time1']))
     logging.info('..............')
     data['stat'] += [c[ti]]
