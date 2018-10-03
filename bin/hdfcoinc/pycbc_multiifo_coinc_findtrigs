@@ -295,23 +295,28 @@ for tnum in range(tmin, tmax):
     for i in ids:
         gs[i]=ids[i][ti]
     del ids
+    logging.info('results of gs {}'.format(gs))
 
     # In the first for cycle the time and trigger_id keys will not exist,
     # we need to create them, otherwise add new items into data.
     if 'time1' in data:
         for i in range(len(args.trigger_files)):
-		    addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtime = numpy.concatenate(addtime)
-			addtriggerid = numpy.concatenate(addtriggerid)
+            addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            logging.info('results of addtime {}'.format(addtime))
+            addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            logging.info('results of addtriggerid {}'.format(addtriggerid))
+            addtime = numpy.concatenate(addtime)
+            addtriggerid = numpy.concatenate(addtriggerid)
             data['time{}'.format(i+1)] += addtime
             data['trigger_id{}'.format(i+1)] += addtriggerid
     else:
         for i in range(len(args.trigger_files)):
-			addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtime = numpy.concatenate(addtime)
-			addtriggerid = numpy.concatenate(addtriggerid)
+            addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            logging.info('results of addtime {}'.format(addtime))
+            addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            logging.info('results of addtriggerid {}'.format(addtriggerid))
+            addtime = numpy.concatenate(addtime)
+            addtriggerid = numpy.concatenate(addtriggerid)
             data['time{}'.format(i+1)] = addtime
             data['trigger_id{}'.format(i+1)] = addtriggerid
     logging.info('print out data[time1] {}'.format(data['time1']))
