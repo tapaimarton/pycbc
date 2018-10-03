@@ -233,16 +233,11 @@ for tnum in range(tmin, tmax):
     ids, slide = coinc.time_multi_coincidence(times, args.timeslide_interval, args.coinc_threshold,trigs['trigs0'].ifo,trigs['trigs1'].ifo)
 
     logging.info('Coincident Trigs: %s' % (len(ids[trigs['trigs0'].ifo])))
-    logging.info('ids from time multi coinc {}'.format(ids))
-    for i in ids:
-        logging.info('ids from time multi coinc {} from ifo {}'.format(ids[i],i))
-    logging.info('slides from time multi coinc {}'.format(slide))
 
     logging.info('Calculating Single Detector Statistic')
     sds={}
     for i in trigs:
         sds[trigs[i].ifo]=rank_method.single(trigs[i])
-    logging.info('results of single det statistics {}'.format(sds))
 
     logging.info('Calculating Multi-Detector Combined Statistic')
 
@@ -303,20 +298,14 @@ for tnum in range(tmin, tmax):
         for i in range(len(args.trigger_files)):
             addtime=times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
             addtriggerid=tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-            logging.info('results of addtime {}'.format(addtime))
-            logging.info('results of addtriggerid {}'.format(addtriggerid))
             data['time{}'.format(i+1)] += [addtime]
             data['trigger_id{}'.format(i+1)] += [addtriggerid]
     else:
         for i in range(len(args.trigger_files)):
             addtime=times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
             addtriggerid=tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-            logging.info('results of addtime {}'.format(addtime))
-            logging.info('results of addtriggerid {}'.format(addtriggerid))
             data['time{}'.format(i+1)] = [addtime]
             data['trigger_id{}'.format(i+1)] = [addtriggerid]
-    logging.info('print out data[time1] {}'.format(data['time1']))
-    logging.info('..............')
     data['stat'] += [c[ti]]
     dec_fac = numpy.repeat([args.decimation_factor, 1, 1],
                            [len(bl), len(bh), len(fi)]).astype(numpy.uint32)
