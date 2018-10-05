@@ -12,9 +12,6 @@ parser.add_argument("--veto-files", nargs='*', action='append', default=[],
                     "contained in the file are ignored")
 parser.add_argument("--segment-name", nargs='*', action='append', default=[],
                     help="Optional, name of veto segment in veto file")
-parser.add_argument("--strict-coinc-time", action='store_true',
-                    help="Optional, only allow coincidences between triggers "
-                    "that lie in coincident time after applying vetoes")
 parser.add_argument("--trigger-files", nargs='*', action='append', default=[],
                     help="File containing the single-detector triggers")
 parser.add_argument("--template-bank", required=True,
@@ -181,10 +178,10 @@ coinc_segs = trigs['trigs0'].segs
 for i in range(len(args.trigger_files)-1):
     coinc_segs = (coinc_segs & trigs['trigs{0}'.format(i+1)].segs).coalesce()
 
-if args.strict_coinc_time:
-    for i in trigs:
-        trigs[i].segs = coinc_segs
-        trigs[i].valid = veto.segments_to_start_end(trigs[i].segs)
+
+for i in trigs:
+    trigs[i].segs = coinc_segs
+    trigs[i].valid = veto.segments_to_start_end(trigs[i].segs)
 
 # initialize a Stat class instance to calculate the coinc ranking statistic
 rank_method = stat.get_statistic(args.ranking_statistic)(args.statistic_files)
@@ -233,25 +230,18 @@ for tnum in range(tmin, tmax):
     ids, slide = coinc.time_multi_coincidence(times, args.timeslide_interval, args.coinc_threshold,trigs['trigs0'].ifo,trigs['trigs1'].ifo)
 
     logging.info('Coincident Trigs: %s' % (len(ids[trigs['trigs0'].ifo])))
-    logging.info('ids from time multi coinc {}'.format(ids))
-    for i in ids:
-        logging.info('ids from time multi coinc {} from ifo {}'.format(ids[i],i))
-    logging.info('slides from time multi coinc {}'.format(slide))
 
     logging.info('Calculating Single Detector Statistic')
     sds={}
     for i in trigs:
         sds[trigs[i].ifo]=rank_method.single(trigs[i])
-    logging.info('results of single det statistics {}'.format(sds))
 
     logging.info('Calculating Multi-Detector Combined Statistic')
 
     sdswithids={}
     for i in sds:
         sdswithids[i]=sds[i][ids[i]]
-    logging.info('sds with ids {}'.format(sdswithids))
     c = rank_method.coinc_multiifo(sdswithids, slide, args.timeslide_interval)
-    logging.info('results of coinc_multiifo {}'.format(c))
 
     #index values of the zerolag triggers
     fi = numpy.where(slide == 0)[0]
@@ -300,21 +290,16 @@ for tnum in range(tmin, tmax):
     # we need to create them, otherwise add new items into data.
     if 'time1' in data:
         for i in range(len(args.trigger_files)):
-		    addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtime = numpy.concatenate(addtime)
-			addtriggerid = numpy.concatenate(addtriggerid)
-            data['time{}'.format(i+1)] += addtime
-            data['trigger_id{}'.format(i+1)] += addtriggerid
+            addtime=times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            addtriggerid=tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            data['time{}'.format(i+1)] += [addtime]
+            data['trigger_id{}'.format(i+1)] += [addtriggerid]
     else:
         for i in range(len(args.trigger_files)):
-			addtime = times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtriggerid = tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
-			addtime = numpy.concatenate(addtime)
-			addtriggerid = numpy.concatenate(addtriggerid)
-            data['time{}'.format(i+1)] = addtime
-            data['trigger_id{}'.format(i+1)] = addtriggerid
-    logging.info('print out data[time1] {}'.format(data['time1']))
+            addtime=times[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            addtriggerid=tids[trigs['trigs{}'.format(i)].ifo][gs[trigs['trigs{}'.format(i)].ifo]]
+            data['time{}'.format(i+1)] = [addtime]
+            data['trigger_id{}'.format(i+1)] = [addtriggerid]
     data['stat'] += [c[ti]]
     dec_fac = numpy.repeat([args.decimation_factor, 1, 1],
                            [len(bl), len(bh), len(fi)]).astype(numpy.uint32)
