@@ -285,7 +285,7 @@ for tnum in range(tmin, tmax):
     # we need to create them, otherwise add new items into data.
     checkstring = '%s_time' % ReadByTemplate(args.trigger_files[0]).ifo
     if checkstring in data:
-        for i in range(len(args.trigger_files)):
+        for ifo in gs:
             addtime=times[ifo][gs[ifo]]
             addtriggerid=tids[ifo][gs[ifo]]
             data['%s_time' % ifo] += [addtime]
