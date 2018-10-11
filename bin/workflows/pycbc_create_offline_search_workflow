@@ -213,6 +213,17 @@ statfiles = []
 statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
                                       final_veto_file, final_veto_name)
 
+ # setup coinc for the filtering jobs
+full_insps = insps
+bg_files = wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
+                               cum_veto_files, veto_names,
+                               output_dir, tags=ctags)
+final_bg_files = wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
+                               final_veto_file, final_veto_name,
+                               output_dir, tags=ctags)
+final_bg_file = final_bg_files[0][0]
+bin_files = final_bg_files[0][1]
+
 # Calculate the inspiral psds and make plots
 psd_files = []
 trig_generated_name = 'TRIGGERS_GENERATED'
