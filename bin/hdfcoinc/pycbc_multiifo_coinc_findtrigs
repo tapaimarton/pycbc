@@ -283,7 +283,7 @@ for tnum in range(tmin, tmax):
 
     # In the first for cycle the time and trigger_id keys will not exist,
     # we need to create them, otherwise add new items into data.
-    checkstring = '%s_time' % ReadByTemplate(args.trigger_files[0]).ifo
+    checkstring = '%s/time' % ReadByTemplate(args.trigger_files[0]).ifo
     if checkstring in data:
         for ifo in gs:
             addtime=times[ifo][gs[ifo]]
