@@ -205,14 +205,14 @@ ind_insps = insps = wf.setup_matchedfltr_workflow(workflow, analyzable_segs,
 
 insps = wf.merge_single_detector_hdf_files(workflow, hdfbank[0],
                                            insps, output_dir, tags=[tag])
-"""
+
 # setup sngl trigger distribution fitting jobs
 # 'statfiles' is list of files used in calculating coinc statistic
 # not used in multi ifo currently
 statfiles = []
 statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
                                       final_veto_file, final_veto_name)
-"""
+
 # setup 3 detector coinc for the filtering jobs
 ctags = [tag, 'full3d']
 full_insps = insps
