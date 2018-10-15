@@ -215,10 +215,10 @@ statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
 # setup 3 detector coinc for the filtering jobs
 ctags = [tag, 'full3d']
 full_insps = insps
-bg_files_3d = wf.setup_interval_coinc(workflow, hdfbank, insps, statfiles,
+bg_files_3d = wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
                                cum_veto_files, veto_names,
                                output_dir, tags=ctags)
-final_bg_files_3d = wf.setup_interval_coinc(workflow, hdfbank, insps, statfiles,
+final_bg_files_3d = wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
                                final_veto_file, final_veto_name,
                                output_dir, tags=ctags)
 
@@ -238,10 +238,10 @@ for i in detectorpairtags:
         if fixed_ifo == ifo:
             insp2d += files[ifo]
 
-    bg_files_2d += wf.setup_interval_coinc(workflow, hdfbank, insp2d, statfiles,
+    bg_files_2d += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
                                cum_veto_files, veto_names,
                                output_dir, tags=ctags)
-    final_bg_files_2d += wf.setup_interval_coinc(workflow, hdfbank, insp2d, statfiles,
+    final_bg_files_2d += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
                                final_veto_file, final_veto_name,
                                output_dir, tags=ctags)
 
