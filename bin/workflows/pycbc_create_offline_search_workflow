@@ -233,7 +233,7 @@ for i in detector_pair_tags:
     insp2d = []
     pivot_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'pivot-ifo', ctags)
     fixed_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'fixed-ifo', ctags)
-    for ifo, files in zip(insps.categorize_by_attr('ifo')):
+    for ifo, files in zip(*insps.categorize_by_attr('ifo')):
         if pivot_ifo == ifo:
             insp2d += files[ifo]
         if fixed_ifo == ifo:
