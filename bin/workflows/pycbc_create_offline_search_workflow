@@ -205,27 +205,28 @@ ind_insps = insps = wf.setup_matchedfltr_workflow(workflow, analyzable_segs,
 
 insps = wf.merge_single_detector_hdf_files(workflow, hdfbank[0],
                                            insps, output_dir, tags=[tag])
-
+"""
 # setup sngl trigger distribution fitting jobs
 # 'statfiles' is list of files used in calculating coinc statistic
+# not used in multi ifo currently
 statfiles = []
 statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
                                       final_veto_file, final_veto_name)
-
+"""
 # setup 3 detector coinc for the filtering jobs
 ctags = [tag, 'full3d']
 full_insps = insps
-bg_files_3d = wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
+bg_files = []
+final_bg_files = []
+bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
                                cum_veto_files, veto_names,
                                output_dir, tags=ctags)
-final_bg_files_3d = wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
+final_bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, statfiles,
                                final_veto_file, final_veto_name,
                                output_dir, tags=ctags)
 
 # setup 2 detector pair coinc for the filtering jobs
-"""
-bg_files_2d = []
-final_bg_files_2d = []
+
 detector_pair_tags = ['full2d0','full2d1','full2d2']
 for i in detector_pair_tags:
     ctags = [tag, 'multiifo_coinc', i]
@@ -238,13 +239,13 @@ for i in detector_pair_tags:
         if fixed_ifo == ifo:
             insp2d += files[ifo]
 
-    bg_files_2d += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
+    bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
                                cum_veto_files, veto_names,
                                output_dir, tags=ctags)
-    final_bg_files_2d += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
+    final_bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
                                final_veto_file, final_veto_name,
                                output_dir, tags=ctags)
-"""
+
 # Calculate the inspiral psds and make plots
 psd_files = []
 trig_generated_name = 'TRIGGERS_GENERATED'
