@@ -223,15 +223,15 @@ final_bg_files_3d = wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, s
                                output_dir, tags=ctags)
 
 # setup 2 detector pair coinc for the filtering jobs
+"""
 bg_files_2d = []
 final_bg_files_2d = []
-# First detector pair
 detector_pair_tags = ['full2d0','full2d1','full2d2']
 for i in detector_pair_tags:
     ctags = [tag, 'multiifo_coinc', i]
     insp2d = []
     pivot_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'pivot-ifo', ctags)
-    fixed_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'pivot-ifo', ctags)
+    fixed_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'fixed-ifo', ctags)
     for ifo, files in zip(insps.categorize_by_attr('ifo')):
         if pivot_ifo == ifo:
             insp2d += files[ifo]
@@ -244,7 +244,7 @@ for i in detector_pair_tags:
     final_bg_files_2d += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
                                final_veto_file, final_veto_name,
                                output_dir, tags=ctags)
-
+"""
 # Calculate the inspiral psds and make plots
 psd_files = []
 trig_generated_name = 'TRIGGERS_GENERATED'
