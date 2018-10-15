@@ -233,11 +233,11 @@ for i in detector_pair_tags:
     insp2d = []
     pivot_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'pivot-ifo', ctags)
     fixed_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'fixed-ifo', ctags)
-    for ifo, files in zip(*insps.categorize_by_attr('ifo')):
+    for ifo, file in zip(*insps.categorize_by_attr('ifo')):
         if pivot_ifo == ifo:
-            insp2d += files[0]
+            insp2d += file
         if fixed_ifo == ifo:
-            insp2d += files[0]
+            insp2d += file
 
     bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insp2d, statfiles,
                                cum_veto_files, veto_names,
