@@ -227,7 +227,6 @@ bg_files_2d = []
 final_bg_files_2d = []
 # First detector pair
 detector_pair_tags = ['full2d0','full2d1','full2d2']
-ifosfor2s, filesfor2d = 
 for i in detectorpairtags:
     ctags = [tag, detectorpairtags[i]]
     insp2d = []
