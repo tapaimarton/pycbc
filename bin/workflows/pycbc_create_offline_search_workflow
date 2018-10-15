@@ -227,8 +227,8 @@ bg_files_2d = []
 final_bg_files_2d = []
 # First detector pair
 detector_pair_tags = ['full2d0','full2d1','full2d2']
-for i in detectorpairtags:
-    ctags = [tag, detectorpairtags[i]]
+for i in detector_pair_tags:
+    ctags = [tag, detector_pair_tags[i]]
     insp2d = []
     pivot_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'pivot-ifo', ctags)
     fixed_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'pivot-ifo', ctags)
