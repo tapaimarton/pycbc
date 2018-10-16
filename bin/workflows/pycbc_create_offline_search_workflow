@@ -208,7 +208,6 @@ insps = wf.merge_single_detector_hdf_files(workflow, hdfbank[0],
 
 # setup sngl trigger distribution fitting jobs
 # 'statfiles' is list of files used in calculating coinc statistic
-# not used in multi ifo currently
 statfiles = []
 statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
                                       final_veto_file, final_veto_name)
@@ -226,10 +225,9 @@ final_bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, insps, sta
                                output_dir, tags=ctags)
 
 # setup 2 detector pair coinc for the filtering jobs
-
 detector_pair_tags = ['full2d0','full2d1','full2d2']
 for i in detector_pair_tags:
-    ctags = [tag, 'multiifo_coinc', i]
+    ctags = [tag, i]
     insp2d = wf.core.FileList()
     pivot_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'pivot-ifo', ctags)
     fixed_ifo = workflow.cp.get_opt_tags('workflow-coincidence', 'fixed-ifo', ctags)
