@@ -495,7 +495,7 @@ def setup_interval_coinc(workflow, hdfbank, trig_files, stat_files,
     return statmap_files
 
 def setup_multiifo_interval_coinc(workflow, hdfbank, trig_files, stat_files,
-                         veto_files, veto_names, out_dir, tags=None):
+                         veto_files, veto_names, out_dir, pivot_ifo, fixed_ifo, tags=None):
     """
     This function sets up exact match multiifo coincidence
     """
@@ -524,6 +524,8 @@ def setup_multiifo_interval_coinc(workflow, hdfbank, trig_files, stat_files,
                                                    stat_files,
                                                    veto_file, veto_name,
                                                    group_str,
+                                                   pivot_ifo,
+                                                   fixed_ifo,
                                                    tags=[veto_name, str(i)])
             bg_files += coinc_node.output_files
             workflow.add_node(coinc_node)
