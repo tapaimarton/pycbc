@@ -218,7 +218,7 @@ bg_files = []
 final_bg_files = []
 
 for i in range(2,len(insps)):
-    combinations = itertools.combination(insps,i)
+    combinations = itertools.combinations(insps,i)
     for inspcomb in combinations:
         ifo_precedence_list = workflow.cp.get_opt_tags('workflow-coincidence', 'timeslide-precedence', ctags)
         ifoindeces = {}
