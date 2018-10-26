@@ -217,19 +217,23 @@ full_insps = insps
 ctags = [tag, 'full']
 bg_files = []
 final_bg_files = []
+ifoindeces = {}
 
-for i in range(2,len(insps)):
-    combinations = wf.core.FileList
-    combinations = itertools.combinations(insps,i)
-    for inspcomb in combinations:
-        ifo_precedence_list = workflow.cp.get_opt_tags('workflow-coincidence', 'timeslide-precedence', ctags)
-        ifoindeces = {}
-        for ifo, file in zip(*inspcomb.categorize_by_attr('ifo')):
-            ifoindeces[ifo] = ifo_precedence_list.index(ifo)
-        pivot_ifo = min(ifoindeces, key=ifoindeces.get)
-        del ifoindeces[pivot_ifo]
-        fixed_ifo = min(ifoindeces, key=ifoindeces.get)
-        coinctag = "{}det_".format(len(inspcomb)+pivot_ifo+fixed_ifo)
+# Get the ifo precedent list for the multiifo coinc jobs
+ifo_precedence_list = workflow.cp.get_opt_tags('workflow-coincidence', 'timeslide-precedence', ctags)
+for ifo, file in zip(*insps.categorize_by_attr('ifo')):
+    ifoindeces[ifo] = ifo_precedence_list.index(ifo)
+ 
+for i in range(2,len(insps)+1):
+    combinations = itertools.combinations(ifoindeces.keys(),i)
+    for ifocomb in combinations:
+        combination_prec = {}
+        for ifo in ifocomb:
+            combination_prec[ifo] = ifoindeces[ifo]
+        pivot_ifo = min(combination_prec, key=combination_prec.get)
+        del combination_prec[pivot_ifo]
+        fixed_ifo = min(combination_prec, key=combination_prec.get)
+        coinctag = "{}det_".format(len(ifocomb))+pivot_ifo+fixed_ifo
         ctagcomb = [ctags, coinctag]
         bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, inspcomb, statfiles,
                                cum_veto_files, veto_names,
