@@ -214,13 +214,13 @@ statfiles += wf.setup_trigger_fitting(workflow, insps, hdfbank,
 
 # setup the detector combination coincs for the filtering jobs
 full_insps = insps
+ctags = [tag, 'full']
 bg_files = []
 final_bg_files = []
 
 for i in range(2,len(insps)):
     combinations = itertools.combinations(insps,i)
     for inspcomb in combinations:
-        ctags = [tag, 'full', coinctag]
         ifo_precedence_list = workflow.cp.get_opt_tags('workflow-coincidence', 'timeslide-precedence', ctags)
         ifoindeces = {}
         for ifo, file in zip(*inspcomb.categorize_by_attr('ifo')):
@@ -229,12 +229,13 @@ for i in range(2,len(insps)):
         del ifoindeces[pivot_ifo]
         fixed_ifo = min(ifoindeces, key=ifoindeces.get)
         coinctag = "{}det_".format(len(inspcomb)+pivot_ifo+fixed_ifo)
+        ctagcomb = [ctags, coinctag]
         bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, inspcomb, statfiles,
                                cum_veto_files, veto_names,
-                               output_dir, pivot_ifo, fixed_ifo, tags=ctags)
+                               output_dir, pivot_ifo, fixed_ifo, tags=ctagcomb)
         final_bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, inspcomb, statfiles,
                                final_veto_file, final_veto_name,
-                               output_dir, pivot_ifo, fixed_ifo, tags=ctags)
+                               output_dir, pivot_ifo, fixed_ifo, tags=ctagcomb)
 
 # Calculate the inspiral psds and make plots
 psd_files = []
