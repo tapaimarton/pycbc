@@ -245,7 +245,7 @@ for i in range(2,len(insps)+1):
 
         # Create coinc tag, and set up the coinc job for the combination
         coinctag = '{}det_'.format(len(ifocomb))+pivot_ifo+fixed_ifo
-        ctagcomb = [ctags, coinctag]
+        ctagcomb = [tag, 'full', coinctag]
         bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, inspcomb, statfiles,
                                cum_veto_files, veto_names,
                                output_dir, pivot_ifo, fixed_ifo, tags=ctagcomb)
