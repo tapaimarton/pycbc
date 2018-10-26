@@ -223,16 +223,27 @@ ifoindeces = {}
 ifo_precedence_list = workflow.cp.get_opt_tags('workflow-coincidence', 'timeslide-precedence', ctags)
 for ifo, file in zip(*insps.categorize_by_attr('ifo')):
     ifoindeces[ifo] = ifo_precedence_list.index(ifo)
- 
+
 for i in range(2,len(insps)+1):
     combinations = itertools.combinations(ifoindeces.keys(),i)
     for ifocomb in combinations:
         combination_prec = {}
+        inspcomb = wf.core.FileList()
+        # create the precedent list for the detector combination
         for ifo in ifocomb:
             combination_prec[ifo] = ifoindeces[ifo]
+
+        # Use the inspiral files for the detector combination only.
+        for ifo, file in zip(*insps.categorize_by_attr('ifo')):
+            if ifo in combination_prec:
+                inspcomb += file
+
+        # Determine the pivot-ifo and fixed-ifo based on the precedent list
         pivot_ifo = min(combination_prec, key=combination_prec.get)
         del combination_prec[pivot_ifo]
         fixed_ifo = min(combination_prec, key=combination_prec.get)
+
+        # Create coinc tag, and set up the coinc job for the combination
         coinctag = "{}det_".format(len(ifocomb))+pivot_ifo+fixed_ifo
         ctagcomb = [ctags, coinctag]
         bg_files += wf.setup_multiifo_interval_coinc(workflow, hdfbank, inspcomb, statfiles,
