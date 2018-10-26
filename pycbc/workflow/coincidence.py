@@ -88,7 +88,7 @@ class PyCBCFindCoincExecutable(Executable):
     current_retention_level = Executable.ALL_TRIGGERS
     file_input_options = ['--statistic-files']
     def create_node(self, trig_files, bank_file, stat_files, veto_file,
-                    veto_name, template_str, pivot_ifo, fixed_ifo tags=None):
+                    veto_name, template_str, pivot_ifo, fixed_ifo, tags=None):
         if tags is None:
             tags = []
         segs = trig_files.get_times_covered_by_files()
