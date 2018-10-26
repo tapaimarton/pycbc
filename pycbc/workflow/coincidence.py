@@ -103,9 +103,9 @@ class PyCBCFindCoincExecutable(Executable):
             node.add_input_opt('--veto-files', veto_file)
             node.add_opt('--segment-name', veto_name)
         if pivot_ifo is not None:
-            node.add_input_opt('--pivot-ifo', pivot_ifo)
+            node.add_opt('--pivot-ifo', pivot_ifo)
         if fixed_ifo is not None:
-            node.add_input_opt('--fixed-ifo', fixed_ifo)
+            node.add_opt('--fixed-ifo', fixed_ifo)
         node.add_opt('--template-fraction-range', template_str)
         node.new_output_file_opt(seg, '.hdf', '--output-file', tags=tags)
         return node
