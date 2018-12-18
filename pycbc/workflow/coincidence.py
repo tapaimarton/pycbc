@@ -148,7 +148,7 @@ class PyCBCStatMapExecutable(Executable):
 class PyCBCMultiifoStatMapExecutable(Executable):
     """Calculate FAP, IFAR, etc"""
     current_retention_level = Executable.MERGED_TRIGGERS
-    def create_node(self, coinc_files, tags=None):
+    def create_node(self, coinc_files, ifos, tags=None):
         if tags is None:
             tags = []
         segs = coinc_files.get_times_covered_by_files()
@@ -341,7 +341,7 @@ def setup_multiifo_statmap(workflow, ifos, coinc_files, bank_file, out_dir, tags
                                               ifos=ifos,
                                               tags=tags, out_dir=out_dir)
 
-    stat_node = statmap_exe.create_node(coinc_files)
+    stat_node = statmap_exe.create_node(coinc_files, ifos)
     workflow.add_node(stat_node)
     return stat_node.output_files[0], stat_node.output_files
 
