@@ -157,8 +157,7 @@ class PyCBCMultiifoStatMapExecutable(Executable):
         node = Node(self)
         node.set_memory(5000)
         node.add_input_list_opt('--coinc-files', coinc_files)
-        ifolist = ' '.join(ifos)
-        node.add_opt('--ifos', ifolist)
+        node.add_opt('--ifos', ifos)
         node.new_output_file_opt(seg, '.hdf', '--output-file', tags=tags)
         return node
 
@@ -342,7 +341,9 @@ def setup_multiifo_statmap(workflow, ifos, coinc_files, bank_file, out_dir, tags
                                               ifos=ifos,
                                               tags=tags, out_dir=out_dir)
 
-    stat_node = statmap_exe.create_node(coinc_files, ifos)
+    
+    ifolist = ' '.join(ifos)
+    stat_node = statmap_exe.create_node(coinc_files, ifolist)
     workflow.add_node(stat_node)
     return stat_node.output_files[0], stat_node.output_files
 
