@@ -41,7 +41,7 @@ parser.add_argument('--version', action='version',
 parser.add_argument('--coinc-files', nargs='+',
                     help='List of coincidence files used to calculate the '
                          'FAP, FAR, etc.')
-parser.add_argument('--ifos', type=list,
+parser.add_argument('--ifos', type=string, nargs='+', action='append', default=[],
                     help='List of ifos used in these coincidence files')
 parser.add_argument('--verbose', action='count')
 parser.add_argument('--cluster-window', type=float, default=10,
