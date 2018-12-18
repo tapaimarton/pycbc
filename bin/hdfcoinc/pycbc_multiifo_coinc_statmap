@@ -109,22 +109,14 @@ fore_locs = all_trigs.timeslide_id == 0
 # Foreground trigger times for ifo.
 fore_time = {}
 for ifo in args.ifos:
-    if ifo == 'L1':
-        fore_time[ifo] = all_trigs['L1/time'][fore_locs]
-    if ifo == 'H1':
-        fore_time[ifo] = all_trigs./H1/time[fore_locs]
-    if ifo == 'V1':
-        fore_time[ifo] = all_trigs./V1/time[fore_locs]
-    if ifo == 'K1':
-        fore_time[ifo] = all_trigs./K1/time[fore_locs]
-    if ifo == 'I1':
-        fore_time[ifo] = all_trigs./I1/time[fore_locs]
+    fore_time[ifo] = all_trigs.data['%s/time' % ifo][fore_locs]
 
 # Average times of triggers from ifo1 and ifo2
 ave_fore_time = 0
 for ifo in args.ifos:
     ave_fore_time += fore_time[ifo] / len(args.ifos)
 
+logging.info("Average foreground time: %s" % ave_fore_time)
 # Remove start and end time around every average foreground trigger time to
 # window around.
 remove_start_time = ave_fore_time - args.veto_window
@@ -139,8 +131,7 @@ veto_time = abs(veto.start_end_to_segments(remove_start_time,
 # times. This gives exclusive background triggers.
 veto_indeces = {}
 for ifo in args.ifos:
-    timestring = '%s/time' % ifo
-    veto_indeces[ifo] = veto.indices_within_times(all_trigs.timestring, remove_start_time,
+    veto_indeces[ifo] = veto.indices_within_times(all_trigs['%s/time' % ifo], remove_start_time,
                                                   remove_end_time)
     exc_zero_trigs = all_trigs.remove(veto_indeces[ifo])
 
@@ -310,10 +301,8 @@ while numpy.any(louder_foreground == 0):
         f['foreground_h%s/fap' % h_iterations] = fap
         f['foreground_h%s/template_id' % h_iterations] = all_trigs.data['template_id'][fore_locs]
         for ifo in args.ifos:
-            trig_id_string = '%s/trigger_id'
-            trig_time_string = '%s/time'
-            trig_id = all_trigs.trig_id_string[fore_locs]
-            trig_time = all_trigs.trig_time_string[fore_locs]
+            trig_id = all_trigs.data['%s/trigger_id' % ifo][fore_locs]
+            trig_time = all_trigs.data['%s/time' % ifo][fore_locs]
             f['foreground_h%s/%s/time' % (h_iterations,ifo)] = trig_time
             f['foreground_h%s/%s/trigger_id' % (h_iterations,ifo)] = trig_id
 
@@ -345,14 +334,12 @@ while numpy.any(louder_foreground == 0):
 
     ave_fore_time = 0
     for ifo in args.ifos:
-        timestring = '%s/time' % ifo
-        ave_rm_time += all_trigs.time1[rm_trig_idx] / len(args.ifos)
+        ave_rm_time += all_trigs['%s/time' % ifo][rm_trig_idx] / len(args.ifos)
 
     ind_to_rm = {}
 
     for ifo in args.ifos:
-        timestring = '%s/time' % ifo
-        ind_to_rm[ifo] = veto.indices_within_times(all_trigs.timestring,
+        ind_to_rm[ifo] = veto.indices_within_times(all_trigs['%s/time' % ifo],
                               [ave_rm_time - args.hierarchical_removal_window],
                               [ave_rm_time + args.hierarchical_removal_window])
 
@@ -367,8 +354,7 @@ while numpy.any(louder_foreground == 0):
     # Calculate the change to foreground trigger time and vetoed out time
     fore_time = {}
     for ifo in args.ifos:
-        timestring = '%s/time' % ifo
-        fore_time[ifo] = all_trigs.timestring[fore_locs]
+        fore_time[ifo] = all_trigs['%s/time' % ifo][fore_locs]
 
     ave_fore_time = 0
     for ifo in args.ifos:
@@ -461,10 +447,8 @@ while numpy.any(louder_foreground == 0):
 
         f['foreground_h%s/template_id' % h_iterations] = all_trigs.data['template_id'][fore_locs]
         for ifo in args.ifos:
-            trig_id_string = '%s/trigger_id'
-            trig_time_string = '%s/time'
-            trig_id = all_trigs.trig_id_string[fore_locs]
-            trig_time = all_trigs.trig_time_string[fore_locs]
+            trig_id = all_trigs.data['%s/trigger_id' % ifo][fore_locs]
+            trig_time = all_trigs.data['%s/time' % ifo][fore_locs]
             f['foreground_h%s/%s/time' % (h_iterations,ifo)] = trig_time
             f['foreground_h%s/%s/trigger_id' % (h_iterations,ifo)] = trig_id
     else :
@@ -473,8 +457,6 @@ while numpy.any(louder_foreground == 0):
         f['foreground_h%s/fap' % h_iterations] = numpy.array([])
         f['foreground_h%s/template_id' % h_iterations] = numpy.array([])
         for ifo in args.ifos:
-            trig_id_string = '%s/trigger_id'
-            trig_time_string = '%s/time'
             f['foreground_h%s/%s/time' % (h_iterations,ifo)] = numpy.array([])
             f['foreground_h%s/%s/trigger_id' % (h_iterations,ifo)] = numpy.array([])
 
