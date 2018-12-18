@@ -234,10 +234,9 @@ class MultiifoStatmapData(DictArray):
             f = HFile(files[0], "r")
             self.seg = f['segments']
             self.attrs = f.attrs
-        self.attrs['ifos'] = ifos
 
-    def _return(self, data):
-        return self.__class__(data=data, attrs=self.attrs, seg=self.seg, ifos=self.ifos)
+    def _return(self, data, ifos):
+        return self.__class__(data=data, attrs=self.attrs, seg=self.seg, ifosifos)
 
     def cluster(self, window):
         """ Cluster the dict array, assuming it has the relevant Coinc colums,
@@ -270,6 +269,14 @@ class MultiifoStatmapData(DictArray):
             f['segments/%s/start' % key] = self.seg[key]['start'][:]
             f['segments/%s/end' % key] = self.seg[key]['end'][:]
         f.close()
+        
+    def remove(self, ifos, idx):
+        """ Return a new DictArray that does not contain the indexed values
+        """
+        data = {}
+        for k in self.data:
+            data[k] = np.delete(self.data[k], idx)
+        return self._return(data=data, ifos=ifos)
 
 class FileData(object):
 

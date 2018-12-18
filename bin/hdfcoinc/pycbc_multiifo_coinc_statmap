@@ -132,7 +132,7 @@ veto_indeces = {}
 for ifo in args.ifos:
     veto_indeces[ifo] = veto.indices_within_times(all_trigs.data['%s/time' % ifo], remove_start_time,
                                                   remove_end_time)
-    exc_zero_trigs = all_trigs.remove(veto_indeces[ifo])
+    exc_zero_trigs = all_trigs.remove(veto_indeces[ifo],args.ifos)
 
 logging.info("Clustering coinc triggers (inclusive of zerolag)")
 all_trigs = all_trigs.cluster(args.cluster_window)
