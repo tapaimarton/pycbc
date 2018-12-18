@@ -339,9 +339,12 @@ f.attrs['timeslide_interval'] = args.timeslide_interval
 f.attrs['num_of_ifos'] = len(args.trigger_files)
 f.attrs['pivot'] = args.pivot_ifo
 f.attrs['fixed'] = args.fixed_ifo
-
+ifolist = []
 for ifo in detectors:
     f.attrs['%s_foreground_time' % ifo] = abs(trigs[ifo].segs)
+    ifolist += [ifo]
+ifolist = numpy.concatenate(ifolist)
+f.attrs['ifos'] = ifolist
 f.attrs['coinc_time'] = abs(coinc_segs)
 
 if args.timeslide_interval:
