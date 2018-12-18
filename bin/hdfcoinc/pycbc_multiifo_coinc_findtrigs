@@ -323,7 +323,7 @@ if args.cluster_window and len(data['stat']) > 0:
 ifolist = []
 for ifo in detectors:
     ifolist += [ifo]
-data['ifos'] = ifolist
+data['ifos'] = [ifolist]
 
 logging.info('saving coincident triggers')
 f = h5py.File(args.output_file, 'w')
