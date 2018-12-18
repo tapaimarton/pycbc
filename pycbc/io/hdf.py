@@ -236,7 +236,7 @@ class MultiifoStatmapData(DictArray):
             self.attrs = f.attrs
 
     def _return(self, data, ifos):
-        return self.__class__(data=data, attrs=self.attrs, seg=self.seg, ifosifos)
+        return self.__class__(data=data, attrs=self.attrs, seg=self.seg, ifos=ifos)
 
     def cluster(self, window):
         """ Cluster the dict array, assuming it has the relevant Coinc colums,
