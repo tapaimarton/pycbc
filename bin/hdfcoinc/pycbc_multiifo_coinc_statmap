@@ -110,7 +110,7 @@ fore_locs = all_trigs.timeslide_id == 0
 fore_time = {}
 for ifo in args.ifos:
     if ifo == 'L1':
-        fore_time[ifo] = all_trigs./L1/time[fore_locs]
+        fore_time[ifo] = all_trigs.['L1/time'][fore_locs]
     if ifo == 'H1':
         fore_time[ifo] = all_trigs./H1/time[fore_locs]
     if ifo == 'V1':
