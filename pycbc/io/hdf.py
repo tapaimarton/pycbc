@@ -225,7 +225,7 @@ class MultiifoStatmapData(DictArray):
         for ifo in ifos:
             groups += ['%s/time' % ifo]
             groups += ['%s/trigger_id' % ifo]
-        super(StatmapData, self).__init__(data=data, files=files, groups=groups)
+        super(MultiifoStatmapData, self).__init__(data=data, files=files, groups=groups)
 
         if data:
             self.seg=seg
