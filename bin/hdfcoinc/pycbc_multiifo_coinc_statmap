@@ -108,8 +108,7 @@ fore_locs = all_trigs.timeslide_id == 0
 # Foreground trigger times for ifo.
 fore_time = {}
 for ifo in args.ifos:
-    timestring = '%s/time' % ifo
-    fore_time[ifo] = all_trigs.timestring[fore_locs]
+    fore_time[ifo] = all_trigs.'%s/time'.format{ifo}[fore_locs]
 
 # Average times of triggers from ifo1 and ifo2
 ave_fore_time = 0
