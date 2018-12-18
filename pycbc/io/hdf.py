@@ -234,9 +234,10 @@ class MultiifoStatmapData(DictArray):
             f = HFile(files[0], "r")
             self.seg = f['segments']
             self.attrs = f.attrs
+        self.attrs['ifos'] = ifos
 
     def _return(self, data):
-        return self.__class__(data=data, attrs=self.attrs, seg=self.seg)
+        return self.__class__(data=data, attrs=self.attrs, seg=self.seg, ifos=self.ifos)
 
     def cluster(self, window):
         """ Cluster the dict array, assuming it has the relevant Coinc colums,
@@ -245,13 +246,11 @@ class MultiifoStatmapData(DictArray):
         # If no events, do nothing
         pivot_ifo = self.attrs['pivot']
         fixed_ifo = self.attrs['fixed']
-        timestring0 = '%s/time' % pivot_ifo
-        timestring1 = '%s/time' % fixed_ifo
-        if len(self.timestring0) == 0 or len(self.timestring1) == 0:
+        if len(self.data['%s/time' % pivot_ifo]) == 0 or len(self.data['%s/time' % fixed_ifo]) == 0:
             return self
         from pycbc.events import cluster_coincs
         interval = self.attrs['timeslide_interval']
-        cid = cluster_coincs(self.stat, self.timestring0, self.timestring1,
+        cid = cluster_coincs(self.stat, self.data['%s/time' % pivot_ifo], self.data[data['%s/time' % fixed_ifo]],
                                  self.timeslide_id, interval, window)
         return self.select(cid)
 

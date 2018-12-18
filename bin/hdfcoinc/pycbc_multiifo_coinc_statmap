@@ -116,7 +116,6 @@ ave_fore_time = 0
 for ifo in args.ifos:
     ave_fore_time += fore_time[ifo] / len(args.ifos)
 
-logging.info("Average foreground time: %s" % ave_fore_time)
 # Remove start and end time around every average foreground trigger time to
 # window around.
 remove_start_time = ave_fore_time - args.veto_window
