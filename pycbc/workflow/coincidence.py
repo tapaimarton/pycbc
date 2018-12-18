@@ -157,9 +157,7 @@ class PyCBCMultiifoStatMapExecutable(Executable):
         node = Node(self)
         node.set_memory(5000)
         node.add_input_list_opt('--coinc-files', coinc_files)
-        ifolist = ''
-        for ifo in ifos:
-            ifolist = ifolist + ifo + ' '
+        ifolist = ' '.join(ifos)
         node.add_opt('--ifos', ifolist)
         node.new_output_file_opt(seg, '.hdf', '--output-file', tags=tags)
         return node
