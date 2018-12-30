@@ -102,19 +102,19 @@ pycbc.init_logging(args.verbose)
 logging.info("Loading coinc triggers")
 logging.info("IFO input: %s" % args.ifos)
 all_trigs = pycbc.io.MultiifoStatmapData(files=args.coinc_files, ifos = args.ifos)
-
+ifos = (all_trigs.ifos).split(' ')
 logging.info("We have %s triggers" % len(all_trigs.stat))
 fore_locs = all_trigs.timeslide_id == 0
 
 # Foreground trigger times for ifo.
 fore_time = {}
-for ifo in all_trigs.ifos:
+for ifo in ifos:
     fore_time[ifo] = all_trigs.data['%s/time' % ifo][fore_locs]
 
 # Average times of triggers from ifo1 and ifo2
 ave_fore_time = 0
-for ifo in all_trigs.ifos:
-    ave_fore_time += fore_time[ifo] / len(all_trigs.ifos)
+for ifo in ifos:
+    ave_fore_time += fore_time[ifo] / len(ifos)
 
 # Remove start and end time around every average foreground trigger time to
 # window around.
@@ -129,7 +129,7 @@ veto_time = abs(veto.start_end_to_segments(remove_start_time,
 # Veto indices from list of triggers for times in ifo 1&2 around the window
 # times. This gives exclusive background triggers.
 veto_indeces = {}
-for ifo in all_trigs.ifos:
+for ifo in ifos:
     veto_indeces[ifo] = veto.indices_within_times(all_trigs.data['%s/time' % ifo], remove_start_time,
                                                   remove_end_time)
     exc_zero_trigs = all_trigs.remove(veto_indeces[ifo])
