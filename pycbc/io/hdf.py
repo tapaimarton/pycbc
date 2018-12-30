@@ -236,7 +236,7 @@ class MultiifoStatmapData(DictArray):
             self.attrs = f.attrs
 
     def _return(self, data):
-        ifolist = (self.ifos).split(' ')
+        ifolist = self.attrs['ifos'].split(' ')
         return self.__class__(data=data, attrs=self.attrs, seg=self.seg, ifos=ifolist)
 
     def cluster(self, window):
