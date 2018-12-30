@@ -186,12 +186,12 @@ for k in exc_zero_trigs.data:
     f['background_exc/' + k] = exc_zero_trigs.data[k]
 
 maxtime = all_trigs.attrs['%s_foreground_time' % f.attrs['pivot']]
-for ifo in trigs:
+for ifo in ifos:
     if all_trigs.attrs['%s_foreground_time' % ifo] > maxtime:
         maxtime = all_trigs.attrs['%s_foreground_time' % ifo]
 
 mintime = all_trigs.attrs['%s_foreground_time' % f.attrs['pivot']]
-for ifo in trigs:
+for ifo in ifos:
     if all_trigs.attrs['%s_foreground_time' % ifo] < mintime:
         mintime = all_trigs.attrs['%s_foreground_time' % ifo]
 
@@ -383,12 +383,12 @@ while numpy.any(louder_foreground == 0):
          f['background_h%s/' %h_iterations + k] = all_trigs.data[k][back_locs]
 
     maxtime = all_trigs.attrs['%s_foreground_time' % f.attrs['pivot']]
-    for ifo in trigs:
+    for ifo in ifos:
         if all_trigs.attrs['%s_foreground_time' % ifo] > maxtime:
             maxtime = all_trigs.attrs['%s_foreground_time' % ifo]
 
     mintime = all_trigs.attrs['%s_foreground_time' % f.attrs['pivot']]
-    for ifo in trigs:
+    for ifo in ifos:
         if all_trigs.attrs['%s_foreground_time' % ifo] < mintime:
             mintime = all_trigs.attrs['%s_foreground_time' % ifo]
 
