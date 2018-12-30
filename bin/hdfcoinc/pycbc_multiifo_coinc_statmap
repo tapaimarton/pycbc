@@ -102,7 +102,7 @@ pycbc.init_logging(args.verbose)
 logging.info("Loading coinc triggers")
 logging.info("IFO input: %s" % args.ifos)
 all_trigs = pycbc.io.MultiifoStatmapData(files=args.coinc_files, ifos = args.ifos)
-ifos = (all_trigs.ifos).split(' ')
+ifos = all_trigs.attrs['ifos'].split(' ')
 logging.info("We have %s triggers" % len(all_trigs.stat))
 fore_locs = all_trigs.timeslide_id == 0
 
