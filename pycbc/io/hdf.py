@@ -250,7 +250,7 @@ class MultiifoStatmapData(DictArray):
             return self
         from pycbc.events import cluster_coincs
         interval = self.attrs['timeslide_interval']
-        cid = cluster_coincs(self.stat, self.data['%s/time' % pivot_ifo], self.data[data['%s/time' % fixed_ifo]],
+        cid = cluster_coincs(self.stat, self.data['%s/time' % pivot_ifo], self.data['%s/time' % fixed_ifo],
                                  self.timeslide_id, interval, window)
         return self.select(cid)
 
